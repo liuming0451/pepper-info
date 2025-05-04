@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朝天椒品种信息 - 品质评估</title>
+    <!-- 添加 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 添加 Chart.js 图表库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            color: #e74c3c;
+        }
+
+        .nav-logo i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #e74c3c;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 1rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e74c3c;
+        }
+
+        .page-title i {
+            font-size: 2rem;
+        }
+
+        /* 新的品质评估页面样式 */
+        .quality-container {
+            display: grid;
+            grid-template-columns: 200px 1fr 300px;
+            gap: 1rem;
+            height: calc(100vh - 180px);
+            overflow: hidden;
+        }
+
+        /* 左侧品种列表 */
+        .variety-list {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .variety-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .variety-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .variety-item.active {
+            background-color: #ffd1d1;
+            color: #e74c3c;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .variety-item.active::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #f5f5f5;
+        }
+
+        /* 中间评估区域 */
+        .evaluation-panel {
+            background-color: #ffd1d1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .chart-area {
+            flex: 1;
+            display: flex;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-circle {
+            position: absolute;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #f8d7da;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e74c3c;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .score-circle::after {
+            content: "适宜度%";
+            position: absolute;
+            bottom: 25px;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .chart-container {
+            width: 80%;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .indicators-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .indicator-label {
+            padding: 0.5rem 1rem;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* 右侧图片区域 */
+        .image-panel {
+            background-color: #fde9f3;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-panel h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .pepper-display {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1200px) {
+            .quality-container {
+                grid-template-columns: 180px 1fr 250px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .quality-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+                height: auto;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+
+            .variety-list {
+                height: 200px;
+            }
+
+            .evaluation-panel {
+                height: auto;
+                min-height: 500px;
+            }
+
+            .image-panel {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-logo">
+                <i class="fas fa-pepper-hot"></i>
+                <h1>朝天椒品种信息</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    主页
+                </a>
+                <a href="pepper-varieties.html" class="nav-link">
+                    <i class="fas fa-seedling"></i>
+                    朝天椒种类
+                </a>
+                <a href="information.html" class="nav-link">
+                    <i class="fas fa-search"></i>
+                    朝天椒品种信息
+                </a>
+                <a href="quality-evaluation.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    品质评估
+                </a>
+                <a href="indicator-query.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    指标查询
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    关于我们
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-chart-bar"></i>
+                <h2>朝天椒品质评估</h2>
+            </div>
+        </div>
+
+        <!-- 品质评估内容 -->
+        <div class="quality-container">
+            <!-- 左侧品种列表 -->
+            <div class="variety-list">
+                <div class="variety-item active">WH93</div>
+                <div class="variety-item">博辣天王3号</div>
+                <div class="variety-item">利农724</div>
+                <div class="variety-item">延乐3号</div>
+                <div class="variety-item">DTHP-1107</div>
+                <div class="variety-item">H3</div>
+                <div class="variety-item">泰系艳椒十六</div>
+                <div class="variety-item">湘辣231</div>
+                <div class="variety-item">天尚红1-3</div>
+                <div class="variety-item">JT-GC2</div>
+                <div class="variety-item">京虹椒天下</div>
+                <div class="variety-item">JXTJ-20235</div>
+                <div class="variety-item">仙草四号</div>
+                <div class="variety-item">天外飞仙</div>
+                <div class="variety-item">GD209</div>
+            </div>
+
+            <!-- 中间评估区域 -->
+            <div class="evaluation-panel">
+                <div class="chart-area">
+                    <div class="chart-container">
+                        <canvas id="indicatorsBarChart"></canvas>
+                    </div>
+                    <div class="score-circle">85</div>
+                </div>
+                <div class="indicators-row">
+                    <div class="indicator-label">指标1</div>
+                    <div class="indicator-label">指标2</div>
+                    <div class="indicator-label">指标3</div>
+                    <div class="indicator-label">指标4</div>
+                    <div class="indicator-label">指标5</div>
+                </div>
+            </div>
+
+            <!-- 右侧图片区域 -->
+            <div class="image-panel">
+                <h3>图片</h3>
+                <img src="https://images.unsplash.com/photo-1588252303782-cb80119abd6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="朝天椒图片" class="pepper-display">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 辣椒品种数据库
+        const pepperData = {
+            1: {
+                name: "WH93",
+                origin: "四川省",
+                spiciness: "★★★★★",
+                climate: "温暖湿润",
+                description: "WH93是一种高产优质的朝天椒品种，具有极高的辣度和独特的香气，是制作川菜和辣椒酱的理想选择。",
+                images: {
+                    fresh: "./images/1/xinxian.png",
+                    plate: "./images/1/pan.png",
+                    bottle: "./images/1/ping.png"
+                },
+                indicators: {
+                    score: 85,
+                    data: [4.2, 3.8, 4.5, 4.8, 5.0],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            2: {
+                name: "博辣天王3号",
+                origin: "四川省",
+                spiciness: "★★★☆☆",
+                climate: "干燥温暖",
+                description: "博辣天王3号品种在干燥温暖的环境中生长旺盛，辣度适中，具有独特的果香味，适合多种烹饪方式。",
+                images: {
+                    fresh: "./images/2/xinxian.png",
+                    plate: "./images/2/pan.png",
+                    bottle: "./images/2/ping.png"
+                },
+                indicators: {
+                    score: 82,
+                    data: [4.0, 3.1, 4.2, 4.5, 4.6],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            3: {
+                name: "利农724",
+                origin: "湖南省",
+                spiciness: "★★★★☆",
+                climate: "温暖湿润",
+                description: "利农724原产于湖南，色泽艳丽，辣味浓烈而持久，特别适合制作泡椒和辣椒酱。",
+                images: {
+                    fresh: "./images/3/xinxian.png",
+                    plate: "./images/3/pan.png",
+                    bottle: "./images/3/ping.png"
+                },
+                indicators: {
+                    score: 88,
+                    data: [4.5, 4.2, 4.7, 4.3, 4.8],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            4: {
+                name: "延乐3号",
+                origin: "湖南省",
+                spiciness: "★★★★★",
+                climate: "温暖湿润",
+                description: "延乐3号是湖南省培育的高辣度品种，果实肉厚多汁，辣味强烈，是湘菜和辣椒酱制作的主要原料之一。",
+                images: {
+                    fresh: "./images/4/xinxian.png",
+                    plate: "./images/4/pan.png",
+                    bottle: "./images/4/ping.png"
+                },
+                indicators: {
+                    score: 90,
+                    data: [4.6, 5.0, 4.5, 4.8, 4.7],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            5: {
+                name: "DTHP-1107",
+                origin: "湖南省",
+                spiciness: "★★★☆☆",
+                climate: "温暖湿润",
+                description: "DTHP-1107是一种中等辣度但香气十足的朝天椒品种，色泽鲜红，味道独特，具有浓郁的辣椒香气，适合制作各种辣味小吃和配菜。",
+                images: {
+                    fresh: "./images/5/xinxian.png",
+                    plate: "./images/5/pan.png",
+                    bottle: "./images/5/ping.png"
+                },
+                indicators: {
+                    score: 86,
+                    data: [4.3, 3.5, 4.8, 4.2, 5.0],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            6: {
+                name: "H3",
+                origin: "云南省",
+                spiciness: "★★★★☆",
+                climate: "高原温凉",
+                description: "H3在云南高原气候下生长，具有特殊的香气和辣味，抗病能力强，适合制作风味独特的云南特色菜肴。",
+                images: {
+                    fresh: "./images/6/xinxian.png",
+                    plate: "./images/6/pan.png",
+                    bottle: "./images/6/ping.png"
+                },
+                indicators: {
+                    score: 87,
+                    data: [4.4, 4.3, 4.2, 4.5, 4.9],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            7: {
+                name: "泰系艳椒十六",
+                origin: "山东省",
+                spiciness: "★★★☆☆",
+                climate: "温带季风",
+                description: "泰系艳椒十六是一种色泽鲜艳的中辣朝天椒，在山东地区种植广泛，具有较好的产量和稳定性，适合制作多种家常菜。",
+                images: {
+                    fresh: "./images/7/xinxian.png",
+                    plate: "./images/7/pan.png",
+                    bottle: "./images/7/ping.png"
+                },
+                indicators: {
+                    score: 83,
+                    data: [4.0, 3.4, 4.6, 4.1, 4.3],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            8: {
+                name: "湘辣231",
+                origin: "贵州省",
+                spiciness: "★★★★★",
+                climate: "亚热带湿润",
+                description: "湘辣231是贵州省新培育的高辣度品种，辣味纯正持久，风味独特，是制作贵州特色辣味菜肴的优选原料。",
+                images: {
+                    fresh: "./images/8/xinxian.png",
+                    plate: "./images/8/pan.png",
+                    bottle: "./images/8/ping.png"
+                },
+                indicators: {
+                    score: 89,
+                    data: [4.5, 4.9, 4.6, 4.3, 4.7],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            9: {
+                name: "天尚红1-3",
+                origin: "四川省",
+                spiciness: "★★★★☆",
+                climate: "温暖湿润",
+                description: "天尚红1-3是四川省传统品种的改良型，辣度适中，香气浓郁，广泛用于川菜烹饪和制作各种辣椒制品。",
+                images: {
+                    fresh: "./images/9/xinxian.png",
+                    plate: "./images/9/pan.png",
+                    bottle: "./images/9/ping.png"
+                },
+                indicators: {
+                    score: 85,
+                    data: [4.2, 4.0, 4.6, 4.4, 4.5],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            10: {
+                name: "JT-GC2",
+                origin: "山东省",
+                spiciness: "★★☆☆☆",
+                climate: "温带季风",
+                description: "JT-GC2是一种低辣度但香气十足的朝天椒品种，适合不太能接受高辣度的人群，在山东地区广受欢迎。",
+                images: {
+                    fresh: "./images/10/xinxian.png",
+                    plate: "./images/10/pan.png",
+                    bottle: "./images/10/ping.png"
+                },
+                indicators: {
+                    score: 80,
+                    data: [4.0, 2.3, 4.5, 4.1, 4.8],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            11: {
+                name: "京虹椒天下",
+                origin: "贵州省",
+                spiciness: "★★★★★",
+                climate: "亚热带湿润",
+                description: "京虹椒天下是贵州省特有的高辣度品种，色泽鲜红，辣味强烈而纯正，是制作贵州特色辣酱和腌制品的首选材料。",
+                images: {
+                    fresh: "./images/11/xinxian.png",
+                    plate: "./images/11/pan.png",
+                    bottle: "./images/11/ping.png"
+                },
+                indicators: {
+                    score: 88,
+                    data: [4.4, 4.8, 4.7, 4.3, 4.6],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            12: {
+                name: "JXTJ-20235",
+                origin: "四川省",
+                spiciness: "★★★★☆",
+                climate: "温暖湿润",
+                description: "JXTJ-20235是一种风味独特的朝天椒品种，辣度适中，香气浓郁，广泛用于川菜烹饪和制作各种辣椒制品。",
+                images: {
+                    fresh: "./images/12/xinxian.png",
+                    plate: "./images/12/pan.png",
+                    bottle: "./images/12/ping.png"
+                },
+                indicators: {
+                    score: 84,
+                    data: [4.1, 4.0, 4.4, 4.2, 4.5],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            13: {
+                name: "仙草四号",
+                origin: "湖南省",
+                spiciness: "★★★★★",
+                climate: "温暖湿润",
+                description: "仙草四号是湖南省培育的高辣度品种，果实肉厚多汁，辣味强烈，是湘菜和辣椒酱制作的主要原料之一。",
+                images: {
+                    fresh: "./images/13/xinxian.png",
+                    plate: "./images/13/pan.png",
+                    bottle: "./images/13/ping.png"
+                },
+                indicators: {
+                    score: 87,
+                    data: [4.3, 4.9, 4.5, 4.6, 4.4],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            14: {
+                name: "天外飞仙",
+                origin: "四川省",
+                spiciness: "★★★☆☆",
+                climate: "温暖湿润",
+                description: "天外飞仙是一种色泽鲜艳的中辣朝天椒，味道独特，具有浓郁的辣椒香气，适合制作各种辣味小吃和配菜。",
+                images: {
+                    fresh: "./images/14/xinxian.png",
+                    plate: "./images/14/pan.png",
+                    bottle: "./images/14/ping.png"
+                },
+                indicators: {
+                    score: 82,
+                    data: [4.0, 3.5, 4.5, 4.0, 4.3],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            },
+            15: {
+                name: "GD209",
+                origin: "云南省",
+                spiciness: "★★★★☆",
+                climate: "高原温凉",
+                description: "GD209在云南高原气候下生长，具有特殊的香气和辣味，抗病能力强，适合制作风味独特的云南特色菜肴。",
+                images: {
+                    fresh: "./images/15/xinxian.png",
+                    plate: "./images/15/pan.png",
+                    bottle: "./images/15/ping.png"
+                },
+                indicators: {
+                    score: 86,
+                    data: [4.3, 4.2, 4.6, 4.3, 4.5],
+                    labels: ['成熟度', '辣度', '色泽', '肉厚度', '香气']
+                }
+            }
+        };
+
+        // 更新指标标签
+        document.querySelectorAll('.indicator-label').forEach((label, index) => {
+            label.textContent = pepperData[1].indicators.labels[index];
+        });
+
+        // 绘制评估图表
+        const ctx = document.getElementById('indicatorsBarChart').getContext('2d');
+        const indicatorsBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: pepperData[1].indicators.labels,
+                datasets: [{
+                    label: '核心指标分数',
+                    data: pepperData[1].indicators.data,
+                    backgroundColor: [
+                        'rgba(255, 255, 255, 0.8)',
+                        'rgba(255, 255, 255, 0.8)',
+                        'rgba(255, 255, 255, 0.8)',
+                        'rgba(255, 255, 255, 0.8)',
+                        'rgba(255, 255, 255, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(231, 76, 60, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: '核心指标分数',
+                        color: '#333'
+                    }
+                }
+            }
+        });
+
+        // 初始化显示第一个品种的图片
+        document.querySelector('.pepper-display').src = pepperData[1].images.fresh;
+        document.querySelector('.score-circle').textContent = pepperData[1].indicators.score;
+
+        // 品种项点击事件
+        document.querySelectorAll('.variety-item').forEach((item, index) => {
+            item.addEventListener('click', function() {
+                // 移除其他项的活跃状态
+                document.querySelectorAll('.variety-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // 添加当前项的活跃状态
+                this.classList.add('active');
+                
+                // 获取当前品种ID - index+1 对应pepperData中的键
+                const varietyId = index + 1;
+                const variety = pepperData[varietyId];
+                
+                // 更新适宜度分数
+                document.querySelector('.score-circle').textContent = variety.indicators.score;
+                
+                // 更新图表数据
+                indicatorsBarChart.data.labels = variety.indicators.labels;
+                indicatorsBarChart.data.datasets[0].data = variety.indicators.data;
+                indicatorsBarChart.update();
+                
+                // 更新图片
+                document.querySelector('.pepper-display').src = variety.images.fresh;
+            });
+        });
+    </script>
+</body>
+</html>

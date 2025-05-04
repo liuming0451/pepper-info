@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朝天椒品种信息 - 关于我们</title>
+    <!-- 添加 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            color: #e74c3c;
+        }
+
+        .nav-logo i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #e74c3c;
+        }
+
+        .nav-link.active {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 1rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e74c3c;
+        }
+
+        .page-title i {
+            font-size: 2rem;
+        }
+
+        /* 关于我们页面特有样式 */
+        .about-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .about-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .about-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f8d7da;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+        }
+
+        .team-member {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .team-member:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .member-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .member-title {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-bio {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .contact-method i {
+            font-size: 1.2rem;
+            width: 30px;
+            color: #e74c3c;
+        }
+
+        .research-image {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 1.5rem 0;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #f8d7da;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #e74c3c;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-content {
+            font-size: 0.95rem;
+        }
+
+        .research-goal {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            border-left: 3px solid #e74c3c;
+        }
+
+        @media (max-width: 900px) {
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-logo">
+                <i class="fas fa-pepper-hot"></i>
+                <h1>朝天椒品种信息</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    主页
+                </a>
+                <a href="pepper-varieties.html" class="nav-link">
+                    <i class="fas fa-seedling"></i>
+                    朝天椒种类
+                </a>
+                <a href="information.html" class="nav-link">
+                    <i class="fas fa-search"></i>
+                    朝天椒品种信息
+                </a>
+                <a href="quality-evaluation.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    品质评估
+                </a>
+                <a href="indicator-query.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    指标查询
+                </a>
+                <a href="about-us.html" class="nav-link active">
+                    <i class="fas fa-info-circle"></i>
+                    关于我们
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-info-circle"></i>
+                <h2>关于我们</h2>
+            </div>
+        </div>
+
+        <!-- 关于我们内容 -->
+        <div class="about-container">
+
+            <!-- 研究目的 -->
+            <div class="about-section">
+                <h3 class="section-title">
+                    <i class="fas fa-bullseye"></i>
+                    研究目的
+                </h3>
+                <p>我们致力于建立完善的朝天椒品种信息系统，通过科学化、标准化的方法对各品种进行系统评价，为农户、企业和消费者提供专业、客观的参考依据。</p>
+                
+                <div class="research-goal">
+                    <strong>品种分类与规范：</strong>明确朝天椒品种特性，减少市场混乱，保障品种纯正性
+                </div>
+                
+                <div class="research-goal">
+                    <strong>品质评估标准化：</strong>建立统一的朝天椒品质评价体系，提升产品质量
+                </div>
+                
+                <div class="research-goal">
+                    <strong>指导生产实践：</strong>为种植户提供品种选择、栽培技术与采收建议
+                </div>
+                
+                <div class="research-goal">
+                    <strong>促进产业发展：</strong>支持朝天椒产业标准化、规模化发展，提高市场竞争力
+                </div>
+                
+                <p style="margin-top: 1rem;">本系统汇集了多年研究成果，希望能为朝天椒产业链各环节参与者提供有价值的信息支持，促进中国特色辣椒产业的健康发展。</p>
+            </div>
+
+            <!-- 联系我们 -->
+            <div class="about-section">
+                <h3 class="section-title">
+                    <i class="fas fa-envelope"></i>
+                    联系我们
+                </h3>
+                <div class="contact-method">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>研究中心地址 农业研究所</div>
+                </div>
+                <div class="contact-method">
+                    <i class="fas fa-phone"></i>
+                    <div>联系电话：0731-88888888</div>
+                </div>
+                <div class="contact-method">
+                    <i class="fas fa-envelope"></i>
+                    <div>电子邮箱：chaotan@pepper.research.cn</div>
+                </div>
+                <div class="contact-method">
+                    <i class="fas fa-globe"></i>
+                    <div>官方网站：www.pepper-research.cn</div>
+                </div>
+                
+                <p style="margin-top: 1rem;">如果您对朝天椒品种有任何疑问，或希望获取更多关于特定品种的详细信息，欢迎随时与我们联系。我们的专业团队将竭诚为您提供帮助。</p>
+                
+                <p style="margin-top: 1rem;">同时，我们也欢迎广大种植户、加工企业和研究机构提供反馈，共同完善朝天椒品种信息系统，促进产业健康发展。</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 页面加载完成后的效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为团队成员添加鼠标悬停效果
+            const teamMembers = document.querySelectorAll('.team-member');
+            teamMembers.forEach(member => {
+                member.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                member.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = 'transparent';
+                });
+            });
+            
+            // 为研究目标添加动画效果
+            const researchGoals = document.querySelectorAll('.research-goal');
+            researchGoals.forEach((goal, index) => {
+                setTimeout(() => {
+                    goal.style.transition = 'all 0.5s ease';
+                    goal.style.transform = 'translateX(0)';
+                    goal.style.opacity = '1';
+                }, index * 200);
+                goal.style.transform = 'translateX(-20px)';
+                goal.style.opacity = '0';
+            });
+        });
+    </script>
+</body>
+</html>

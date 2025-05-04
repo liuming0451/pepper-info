@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朝天椒品种信息 - 品种合集</title>
+    <!-- 添加 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            color: #e74c3c;
+        }
+
+        .nav-logo i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #e74c3c;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e74c3c;
+        }
+
+        .page-title i {
+            font-size: 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            padding: 0.7rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 300px;
+            font-size: 1rem;
+        }
+
+        .search-button {
+            padding: 0.7rem 1.5rem;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #c0392b;
+        }
+
+        .content-container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            flex: 0 0 200px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .filter-title {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .filter-list {
+            list-style: none;
+        }
+
+        .filter-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+        }
+
+        .filter-item:hover {
+            color: #e74c3c;
+            padding-left: 5px;
+        }
+
+        .filter-item.active {
+            color: #e74c3c;
+            font-weight: bold;
+            background-color: #fff9f9;
+            padding-left: 10px;
+            border-radius: 4px;
+        }
+
+        .more-filters {
+            margin-top: 1rem;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .add-filter {
+            margin-top: 1rem;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-filter:hover {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .varieties-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .variety-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+
+        .variety-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(231, 76, 60, 0.1);
+            border-color: #e74c3c;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .variety-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .card-content {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .variety-name {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .pagination {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            color: #666;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .pagination-button:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* 设置带渐变的卡片标签样式 */
+        .card-tag {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            border-top-right-radius: 8px;
+        }
+
+        /* 添加回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px);
+        }
+
+        /* 添加加载动画 */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.8);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #e74c3c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 筛选标签样式 */
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .filter-tag {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.9rem;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background-color: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        /* 详情弹窗样式 */
+        .detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .detail-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .modal-description {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 150px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .varieties-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                margin-bottom: 1.5rem;
+            }
+
+            .varieties-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .modal-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .varieties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 查看详情按钮 */
+        .view-details {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .view-details:hover {
+            background-color: #c0392b;
+        }
+
+        /* 图片类型切换 */
+        .image-types {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .image-type {
+            padding: 0.5rem 1rem;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .image-type:hover, .image-type.active {
+            background-color: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-logo">
+                <i class="fas fa-pepper-hot"></i>
+                <h1>朝天椒品种信息</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    主页
+                </a>
+                <a href="pepper-varieties.html" class="nav-link">
+                    <i class="fas fa-seedling"></i>
+                    朝天椒种类
+                </a>
+                <a href="information.html" class="nav-link">
+                    <i class="fas fa-search"></i>
+                    朝天椒品种信息
+                </a>
+                <a href="quality-evaluation.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    品质评估
+                </a>
+                <a href="indicator-query.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    指标查询
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    关于我们
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-seedling"></i>
+                <h2>朝天椒品种合集</h2>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="搜索朝天椒品种...">
+                <button class="search-button">搜索</button>
+            </div>
+        </div>
+
+        <div class="content-container">
+            <aside class="sidebar">
+                <h3 class="filter-title">按产地筛选</h3>
+                <div class="variety-list">
+                    <div class="variety-item active">四川省</div>
+                    <div class="variety-item">湖南省</div>
+                    <div class="variety-item">山东省</div>
+                    <div class="variety-item">云南省</div>
+                    <div class="variety-item">贵州省</div>
+                </div>
+                <div class="more-filters">更多...</div>
+                <div class="add-filter">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </aside>
+
+            <div class="varieties-grid">
+                <div class="variety-card" data-id="1">
+                    <div class="card-image">
+                        <img src="./images/1/xinxian.png" alt="WH93">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">WH93</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="2">
+                    <div class="card-image">
+                        <img src="./images/2/xinxian.png" alt="博辣天王3号">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">博辣天王3号</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="3">
+                    <div class="card-image">
+                        <img src="./images/3/xinxian.png" alt="利农724">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">利农724</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="4">
+                    <div class="card-image">
+                        <img src="./images/4/xinxian.png" alt="延乐3号">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">延乐3号</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="5">
+                    <div class="card-image">
+                        <img src="./images/5/xinxian.png" alt="DTHP-1107">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">DTHP-1107</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="6">
+                    <div class="card-image">
+                        <img src="./images/6/xinxian.png" alt="H3">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">H3</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="7">
+                    <div class="card-image">
+                        <img src="./images/7/xinxian.png" alt="泰系艳椒十六">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">泰系艳椒十六</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="8">
+                    <div class="card-image">
+                        <img src="./images/8/xinxian.png" alt="湘辣231">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">湘辣231</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="9">
+                    <div class="card-image">
+                        <img src="./images/9/xinxian.png" alt="天尚红1-3">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">天尚红1-3</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="10">
+                    <div class="card-image">
+                        <img src="./images/10/xinxian.png" alt="JT-GC2">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">JT-GC2</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="11">
+                    <div class="card-image">
+                        <img src="./images/11/xinxian.png" alt="京虹椒天下">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">京虹椒天下</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="12">
+                    <div class="card-image">
+                        <img src="./images/12/xinxian.png" alt="JXTJ-20235">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">JXTJ-20235</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="13">
+                    <div class="card-image">
+                        <img src="./images/13/xinxian.png" alt="仙草四号">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">仙草四号</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="14">
+                    <div class="card-image">
+                        <img src="./images/14/xinxian.png" alt="天外飞仙">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">天外飞仙</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="variety-card" data-id="15">
+                    <div class="card-image">
+                        <img src="./images/15/xinxian.png" alt="GD209">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="variety-name">GD209</h3>
+                        <button class="view-details">查看详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <a href="#" class="pagination-button">1/3页</a>
+        </div>
+    </main>
+
+    <!-- 回到顶部按钮 -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- 加载动画 -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- 品种详情弹窗 -->
+    <div class="detail-modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">朝天椒品种详情</h2>
+                <i class="fas fa-times modal-close" id="modalClose"></i>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info">
+                    <div class="info-item">
+                        <span class="info-label">品种名称</span>
+                        <span class="info-value" id="varietyName">名字</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">产地</span>
+                        <span class="info-value" id="origin">四川省</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">辣度</span>
+                        <span class="info-value" id="spiciness">★★★★☆</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">适宜种植气候</span>
+                        <span class="info-value" id="climate">温暖湿润</span>
+                    </div>
+                </div>
+                <div class="modal-description" id="description">
+                    朝天椒是中国地方品种，因为它长势优良，辛辣可口而被大面积种植。它具有很高的营养价值，富含维生素C和辣椒素。在烹饪中，朝天椒能增添菜肴的香辣风味，广泛用于川菜、湘菜等菜系。
+                </div>
+                <div class="filter-tags">
+                    <span class="filter-tag">辣度高</span>
+                    <span class="filter-tag">适合腌制</span>
+                    <span class="filter-tag">适合干燥</span>
+                    <span class="filter-tag">适合炒菜</span>
+                </div>
+                
+                <!-- 图片类型切换 -->
+                <div class="image-types">
+                    <div class="image-type active" data-type="fresh">新鲜</div>
+                    <div class="image-type" data-type="plate">盘装</div>
+                    <div class="image-type" data-type="bottle">瓶装</div>
+                </div>
+                
+                <div class="modal-gallery" id="imageGallery">
+                    <!-- 图片会通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 辣椒品种数据
+        const pepperData = {
+            1: {
+                name: "WH93",
+                origin: "四川省",
+                spiciness: "★★★★★",
+                climate: "温暖湿润",
+                description: "WH93是一种高产优质的朝天椒品种，具有极高的辣度和独特的香气，是制作川菜和辣椒酱的理想选择。",
+                images: {
+                    fresh: ["./images/1/xinxian.png"],
+                    plate: ["./images/1/pan.png"],
+                    bottle: ["./images/1/ping.png"]
+                }
+            },
+            2: {
+                name: "博辣天王3号",
+                origin: "四川省",
+                spiciness: "★★★☆☆",
+                climate: "干燥温暖",
+                description: "博辣天王3号品种在干燥温暖的环境中生长旺盛，辣度适中，具有独特的果香味，适合多种烹饪方式。",
+                images: {
+                    fresh: ["./images/2/xinxian.png"],
+                    plate: ["./images/2/pan.png"],
+                    bottle: ["./images/2/ping.png"]
+                }
+            },
+            3: {
+                name: "利农724",
+                origin: "湖南省",
+                spiciness: "★★★★☆",
+                climate: "温暖湿润",
+                description: "利农724原产于湖南，色泽艳丽，辣味浓烈而持久，特别适合制作泡椒和辣椒酱。",
+                images: {
+                    fresh: ["./images/3/xinxian.png"],
+                    plate: ["./images/3/pan.png"],
+                    bottle: ["./images/3/ping.png"]
+                }
+            },
+            4: {
+                name: "延乐3号",
+                origin: "湖南省",
+                spiciness: "★★★★★",
+                climate: "温暖湿润",
+                description: "延乐3号是湖南省培育的高辣度品种，果实肉厚多汁，辣味强烈，是湘菜和辣椒酱制作的主要原料之一。",
+                images: {
+                    fresh: ["./images/4/xinxian.png"],
+                    plate: ["./images/4/pan.png"],
+                    bottle: ["./images/4/ping.png"]
+                }
+            },
+            5: {
+                name: "DTHP-1107",
+                origin: "湖南省",
+                spiciness: "★★★☆☆",
+                climate: "温暖湿润",
+                description: "DTHP-1107是一种中等辣度但香气十足的朝天椒品种，色泽鲜红，味道独特，具有浓郁的辣椒香气，适合制作各种辣味小吃和配菜。",
+                images: {
+                    fresh: ["./images/5/xinxian.png"],
+                    plate: ["./images/5/pan.png"],
+                    bottle: ["./images/5/ping.png"]
+                }
+            },
+            6: {
+                name: "H3",
+                origin: "云南省",
+                spiciness: "★★★★☆",
+                climate: "高原温凉",
+                description: "H3在云南高原气候下生长，具有特殊的香气和辣味，抗病能力强，适合制作风味独特的云南特色菜肴。",
+                images: {
+                    fresh: ["./images/6/xinxian.png"],
+                    plate: ["./images/6/pan.png"],
+                    bottle: ["./images/6/ping.png"]
+                }
+            },
+            7: {
+                name: "泰系艳椒十六",
+                origin: "山东省",
+                spiciness: "★★★☆☆",
+                climate: "温带季风",
+                description: "泰系艳椒十六是一种色泽鲜艳的中辣朝天椒，在山东地区种植广泛，具有较好的产量和稳定性，适合制作多种家常菜。",
+                images: {
+                    fresh: ["./images/7/xinxian.png"],
+                    plate: ["./images/7/pan.png"],
+                    bottle: ["./images/7/ping.png"]
+                }
+            },
+            8: {
+                name: "湘辣231",
+                origin: "贵州省",
+                spiciness: "★★★★★",
+                climate: "亚热带湿润",
+                description: "湘辣231是贵州省新培育的高辣度品种，辣味纯正持久，风味独特，是制作贵州特色辣味菜肴的优选原料。",
+                images: {
+                    fresh: ["./images/8/xinxian.png"],
+                    plate: ["./images/8/pan.png"],
+                    bottle: ["./images/8/ping.png"]
+                }
+            },
+            9: {
+                name: "天尚红1-3",
+                origin: "四川省",
+                spiciness: "★★★★☆",
+                climate: "温暖湿润",
+                description: "天尚红1-3是四川省传统品种的改良型，辣度适中，香气浓郁，广泛用于川菜烹饪和制作各种辣椒制品。",
+                images: {
+                    fresh: ["./images/9/xinxian.png"],
+                    plate: ["./images/9/pan.png"],
+                    bottle: ["./images/9/ping.png"]
+                }
+            },
+            10: {
+                name: "JT-GC2",
+                origin: "山东省",
+                spiciness: "★★☆☆☆",
+                climate: "温带季风",
+                description: "JT-GC2是一种低辣度但香气十足的朝天椒品种，适合不太能接受高辣度的人群，在山东地区广受欢迎。",
+                images: {
+                    fresh: ["./images/10/xinxian.png"],
+                    plate: ["./images/10/pan.png"],
+                    bottle: ["./images/10/ping.png"]
+                }
+            },
+            11: {
+                name: "京虹椒天下",
+                origin: "贵州省",
+                spiciness: "★★★★★",
+                climate: "亚热带湿润",
+                description: "京虹椒天下是贵州省特有的高辣度品种，色泽鲜红，辣味强烈而纯正，是制作贵州特色辣酱和腌制品的首选材料。",
+                images: {
+                    fresh: ["./images/11/xinxian.png"],
+                    plate: ["./images/11/pan.png"],
+                    bottle: ["./images/11/ping.png"]
+                }
+            },
+            12: {
+                name: "JXTJ-20235",
+                origin: "四川省",
+                spiciness: "★★★★☆",
+                climate: "温暖湿润",
+                description: "JXTJ-20235是一种风味独特的朝天椒品种，辣度适中，香气浓郁，广泛用于川菜烹饪和制作各种辣椒制品。",
+                images: {
+                    fresh: ["./images/12/xinxian.png"],
+                    plate: ["./images/12/pan.png"],
+                    bottle: ["./images/12/ping.png"]
+                }
+            },
+            13: {
+                name: "仙草四号",
+                origin: "湖南省",
+                spiciness: "★★★★★",
+                climate: "温暖湿润",
+                description: "仙草四号是湖南省培育的高辣度品种，果实肉厚多汁，辣味强烈，是湘菜和辣椒酱制作的主要原料之一。",
+                images: {
+                    fresh: ["./images/13/xinxian.png"],
+                    plate: ["./images/13/pan.png"],
+                    bottle: ["./images/13/ping.png"]
+                }
+            },
+            14: {
+                name: "天外飞仙",
+                origin: "四川省",
+                spiciness: "★★★☆☆",
+                climate: "温暖湿润",
+                description: "天外飞仙是一种色泽鲜艳的中辣朝天椒，味道独特，具有浓郁的辣椒香气，适合制作各种辣味小吃和配菜。",
+                images: {
+                    fresh: ["./images/14/xinxian.png"],
+                    plate: ["./images/14/pan.png"],
+                    bottle: ["./images/14/ping.png"]
+                }
+            },
+            15: {
+                name: "GD209",
+                origin: "云南省",
+                spiciness: "★★★★☆",
+                climate: "高原温凉",
+                description: "GD209在云南高原气候下生长，具有特殊的香气和辣味，抗病能力强，适合制作风味独特的云南特色菜肴。",
+                images: {
+                    fresh: ["./images/15/xinxian.png"],
+                    plate: ["./images/15/pan.png"],
+                    bottle: ["./images/15/ping.png"]
+                }
+            }
+        };
+
+        // 省份筛选功能 - 更新筛选逻辑使用数据对象
+        document.querySelectorAll('.filter-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 显示加载动画
+                document.querySelector('.loading').classList.add('active');
+                
+                // 移除其他项目的活跃状态
+                document.querySelectorAll('.filter-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // 添加当前项目的活跃状态
+                this.classList.add('active');
+                
+                // 模拟加载延迟
+                setTimeout(() => {
+                    // 隐藏加载动画
+                    document.querySelector('.loading').classList.remove('active');
+                    
+                    // 实际筛选逻辑
+                    const selectedProvince = this.textContent;
+                    console.log('筛选省份:', selectedProvince);
+                    
+                    // 筛选展示卡片 - 使用pepperData对象
+                    document.querySelectorAll('.variety-card').forEach(card => {
+                        const cardId = card.getAttribute('data-id');
+                        const pepperInfo = pepperData[cardId];
+                        
+                        if (selectedProvince === '四川省') {
+                            card.style.display = 'block'; // 四川省显示所有卡片
+                        } else if (pepperInfo && pepperInfo.origin === selectedProvince) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                }, 500);
+            });
+        });
+
+        // 更新详情弹窗内容
+        function updateModalContent(pepperId) {
+            const pepper = pepperData[pepperId];
+            if (!pepper) return;
+            
+            // 更新基本信息
+            document.getElementById('varietyName').textContent = pepper.name;
+            document.getElementById('origin').textContent = pepper.origin;
+            document.getElementById('spiciness').textContent = pepper.spiciness;
+            document.getElementById('climate').textContent = pepper.climate;
+            document.getElementById('description').textContent = pepper.description;
+            
+            // 默认显示新鲜图片
+            updateGalleryImages('fresh');
+        }
+        
+        // 更新图片画廊
+        function updateGalleryImages(type) {
+            const currentId = document.getElementById('detailModal').getAttribute('data-current-id');
+            const pepper = pepperData[currentId];
+            if (!pepper) return;
+            
+            const gallery = document.getElementById('imageGallery');
+            gallery.innerHTML = '';
+            
+            const images = pepper.images[type] || [];
+            images.forEach(imgSrc => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.alt = `${pepper.name} ${type} 图片`;
+                
+                galleryItem.appendChild(img);
+                gallery.appendChild(galleryItem);
+            });
+        }
+
+        // 图片类型切换
+        document.querySelectorAll('.image-type').forEach(typeBtn => {
+            typeBtn.addEventListener('click', function() {
+                // 移除其他类型的活跃状态
+                document.querySelectorAll('.image-type').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // 添加当前类型的活跃状态
+                this.classList.add('active');
+                
+                // 更新图片
+                const type = this.getAttribute('data-type');
+                updateGalleryImages(type);
+            });
+        });
+
+        // 品种卡片点击事件 - 使用查看详情按钮触发
+        document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // 阻止事件冒泡
+                
+                const card = this.closest('.variety-card');
+                const cardId = card.getAttribute('data-id');
+                
+                // 设置当前查看的品种ID
+                document.getElementById('detailModal').setAttribute('data-current-id', cardId);
+                
+                // 更新弹窗内容
+                updateModalContent(cardId);
+                
+                // 显示弹窗
+                document.getElementById('detailModal').classList.add('active');
+            });
+        });
+
+        // 关闭弹窗
+        document.getElementById('modalClose').addEventListener('click', function() {
+            document.getElementById('detailModal').classList.remove('active');
+        });
+        
+        // 点击弹窗外部关闭
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+
+        // 回到顶部按钮
+        const backToTopButton = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        const searchButton = document.querySelector('.search-button');
+        
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') return;
+            
+            // 显示加载动画
+            document.querySelector('.loading').classList.add('active');
+            
+            // 模拟加载延迟
+            setTimeout(() => {
+                // 隐藏加载动画
+                document.querySelector('.loading').classList.remove('active');
+                
+                // 搜索逻辑
+                let found = false;
+                document.querySelectorAll('.variety-card').forEach(card => {
+                    const cardId = card.getAttribute('data-id');
+                    const pepperInfo = pepperData[cardId];
+                    const cardName = card.querySelector('.variety-name').textContent.toLowerCase();
+                    
+                    if (!pepperInfo) return;
+                    
+                    // 搜索名称、产地和描述中的关键词
+                    if (
+                        cardName.includes(searchTerm) || 
+                        pepperInfo.origin.toLowerCase().includes(searchTerm) ||
+                        pepperInfo.description.toLowerCase().includes(searchTerm)
+                    ) {
+                        card.style.display = 'block';
+                        found = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // 重置筛选项的选中状态
+                document.querySelectorAll('.filter-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // 如果找到结果，滚动到结果区域
+                if (found) {
+                    const firstVisibleCard = document.querySelector('.variety-card[style="display: block"]');
+                    if (firstVisibleCard) {
+                        firstVisibleCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html> 
